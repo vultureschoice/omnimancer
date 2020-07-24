@@ -13,7 +13,7 @@ const cheerio = require('cheerio'); // wrapper for jQuery
 
 // Hide API key
 // TODO: Disable on Heroku server because it handles env variables differently
-require('dotenv').config();
+// require('dotenv').config();
 
 // Variables for parsing user input
 let inputString = "";
@@ -165,9 +165,7 @@ const tarotModule = {
         .setTitle(title)
         .setURL(url)
         .setColor(this.colors[this.deck[index].suit])
-        // TODO: delete .attachFiles() lines when uploaded to the cloud
-        .attachFiles("./tarot_images/" + image)
-        .setImage('attachment://' + image)
+        .setImage("./tarot_images/" + image)
         .addFields(
           {name: 'Meaning', value:
             (upright ? this.deck[index].meaning : this.deck[index].rev)}
@@ -181,8 +179,7 @@ const tarotModule = {
         .setURL(url)
         .setColor(this.colors[this.deck[index].suit])
         // TODO: delete .attachFiles() lines when uploaded to the cloud
-        .attachFiles("./tarot_images/" + image)
-        .setImage('attachment://' + image)
+        .setImage("./tarot_images/" + image)
         .setFooter('Image © U.S. Games Systems, Inc.');
       return result;
     }
