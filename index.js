@@ -136,8 +136,6 @@ const tarotModule = {
     "Eight", "Nine", "Ten", "Page", "Knight", "Queen", "King"],
   colors: ["#E5E0ED", "#C1B928", "#6286B6", "#550C01", "#576A1C"], // match suits
   invoke: async function (verbose) {
-    // Validate verbosity argument
-    if (typeof(verbose) !== "boolean") return VERB_ARG_ERROR;
     let index = Math.floor(Math.random() * DECK_LENGTH);
     // 80% chance of being upright
     let upright = Math.floor(Math.random()) < 0.8 ? true : false;
