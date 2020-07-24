@@ -2,8 +2,11 @@
   "name": "Omnimancer",
   "version": "1.0.0",
   "description": "Randomly generates prompts for creative people",
-  "main": "hello.js",
+  "main": "index.js",
   "author": "Vulture's Choice Productions",
+  "scripts": {
+    "start": "node index.js"
+  }
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "discord.js": "^12.2.0",
