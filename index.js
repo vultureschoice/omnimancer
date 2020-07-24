@@ -48,6 +48,9 @@ const DECK_LENGTH = 78;
 
 const JSON_POST_LIMIT = 500;
 
+const VERB_ARGS = ["more", "verbose", "-v"];
+const VERB_ARG_ERROR = "Sorry, I can't tell how verbose you want the Tarot card to be.";
+
 /* RANDOMNESS MODULE OBJECTS */
 
 const diceModule = {
