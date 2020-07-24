@@ -155,12 +155,16 @@ const tarotModule = {
     if (!upright) title += " (reversed)";
 
     // Generate image filename
-    image = this.deck[index].img + (!upright ? "r" : "") + ".jpg"
+    let image = this.deck[index].img + (!upright ? "r" : "") + ".jpg"
     timeLog("Fetching image: " + image);
 
     // Generate url
-    url = "https://www.tarot.com/tarot/cards/" + this.deck[index].url
+    let url = "https://www.tarot.com/tarot/cards/" + this.deck[index].url
       + "/rider";
+
+    // Generate image url
+    let imgUrl = "https://github.com/vultureschoice/omnimancer/" +
+      "tree/master/tarot_images/" + image;
 
     // Make an embed
     if (verbose) {
@@ -169,7 +173,7 @@ const tarotModule = {
         .setTitle(title)
         .setURL(url)
         .setColor(this.colors[this.deck[index].suit])
-        .setImage("../tarot_images/" + image)
+        .setImage(imgUrl)
         .addFields(
           {name: 'Meaning', value:
             (upright ? this.deck[index].meaning : this.deck[index].rev)}
@@ -183,8 +187,7 @@ const tarotModule = {
         .setTitle(title)
         .setURL(url)
         .setColor(this.colors[this.deck[index].suit])
-        // TODO: delete .attachFiles() lines when uploaded to the cloud
-        .setImage("../tarot_images/" + image)
+        .setImage(imgUrl)
         .setFooter('Image © U.S. Games Systems, Inc.');
       return result;
     }
