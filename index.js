@@ -169,7 +169,7 @@ const tarotModule = {
         .setTitle(title)
         .setURL(url)
         .setColor(this.colors[this.deck[index].suit])
-        .setImage("./tarot_images/" + image)
+        .setImage("../tarot_images/" + image)
         .addFields(
           {name: 'Meaning', value:
             (upright ? this.deck[index].meaning : this.deck[index].rev)}
@@ -184,7 +184,7 @@ const tarotModule = {
         .setURL(url)
         .setColor(this.colors[this.deck[index].suit])
         // TODO: delete .attachFiles() lines when uploaded to the cloud
-        .setImage("./tarot_images/" + image)
+        .setImage("../tarot_images/" + image)
         .setFooter('Image © U.S. Games Systems, Inc.');
       return result;
     }
