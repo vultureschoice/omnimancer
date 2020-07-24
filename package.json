@@ -1,6 +1,6 @@
 {
   "name": "Omnimancer",
-  "version": "0.4",
+  "version": "1.0.0",
   "description": "Randomly generates prompts for creative people",
   "main": "hello.js",
   "author": "Vulture's Choice Productions",
