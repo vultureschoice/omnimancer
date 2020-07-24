@@ -222,9 +222,9 @@ const redditModule = {
 
     // Make embed
     // Truncate title if necessary
-    let embedTitle = posts[index].length > 255 ?
+    let embedTitle = posts[i].length > 255 ?
       posts[i].slice(0, 252) + "..." : posts[i];
-    if (thumbs[index].includes("jpg")) { // Image posts
+    if (thumbs[i].includes("jpg")) { // Image posts
       return new Discord.MessageEmbed()
         .setTitle(embedTitle)
         .setURL(urls[i])
@@ -490,7 +490,7 @@ client.on('message', async (msg) => {
       }
       else { // At least 2 arguments
         let result;
-        if (args.length == 2 && args[2] != "help") { // Exactly 2 arguments
+        if (args.length == 2 && args[1] != "help") { // Exactly 2 arguments
           // timeLog('Exactly 2 arguments: Select random module');
           result = await moduleSelect(HELP_MODULE, false, null);
         }
