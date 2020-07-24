@@ -490,9 +490,10 @@ client.on('message', async (msg) => {
       }
       else { // At least 2 arguments
         let result;
-        if (args.length == 2 && args[1] != "help") { // Exactly 2 arguments
+        if (args.length == 2) { // Exactly 2 arguments
           // timeLog('Exactly 2 arguments: Select random module');
-          result = await moduleSelect(HELP_MODULE, false, null);
+          if (args[1] == "help") result = await moduleSelect(HELP_MODULE, false, null);
+          else result = await moduleSelect(randomModule(), false, null);
         }
         else if (args[1] != "help") { // More than 2 arguments
           // timeLog('Multiple arguments: Select module manually');
