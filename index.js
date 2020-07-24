@@ -163,8 +163,8 @@ const tarotModule = {
       + "/rider";
 
     // Generate image url
-    let imgUrl = "https://github.com/vultureschoice/omnimancer/" +
-      "tree/master/tarot_images/" + image;
+    let imgUrl = "https://raw.githubusercontent.com/vultureschoice/omnimancer/"
+      + "master/tarot_images/" + image;
 
     // Make an embed
     if (verbose) {
