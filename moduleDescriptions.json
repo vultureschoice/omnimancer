@@ -2,36 +2,37 @@
   "dice": {
     "desc": "This bot can flip a coin (2 sides) or roll one of seven standard dice for tabletop games (4, 6, 8, 10, 12, 20, or 100 sides). You can specify any of those numbers, or the bot can randomly pick a die or coin for you.",
     "sugg": "- Use an 8-sided die repeatedly to generate a melody\n- Use a 12-sided die to pick one of 12 musical keys\n- Check tabletop game manuals for die-based events that can inspire writing",
-    "comm": "**!inspire me dice** *roll a random die for yourself*\n**!inspire me dice 2** *flip a coin*\n**!inspire all dice 20** *roll a 20-sided die for everyone*"
+    "comm": "**?dice** *roll a random die and post the results*\n**?dice 2** *flip a coin*\n**?dice 20** *roll a 20-sided die for everyone\n**?dice me** *roll a 6-sided die for yourself*"
   },
   "oblique": {
     "desc": "This bot can draw a card from Oblique Strategies, a set of creative prompts written by musician Brian Eno and artist Peter Schmidt. Oblique Strategies inspired the creation of this bot.",
     "sugg": "Think laterally, not literally",
-    "comm": "**!inspire me oblique** *draw a card for yourself*"
+    "comm": "**?oblique** *draw a card for everyone*\n**?oblique me** *draw a card for yourself*"
   },
   "image": {
     "desc": "This bot can post a picture from Dogpile Image Search, using a randomly picked search term from a list of all things (kinda) gothic.",
     "sugg": "What if there were something just off-camera?",
-    "comm": "**!inspire me image** *send yourself a random image*"
+    "comm": "**?image** *post a random image*\n**?image me** *send yourself a random image*"
   },
   "tarot": {
     "desc": "This bot can draw a random Rider-Waite Tarot card, upright or reversed, with a link to a tarot.com page about that card. With the \"more\" option, the card it draws will include Arthur Waite's original description from The Pictorial Guide to the Tarot, even though it's pretty archaic.",
     "sugg": "- Be the Querent, but in character\n- Tarot symbolism has inspired tons of character and plot design",
-    "comm": "**!inspire me tarot** *draw a card for yourself*\n**!inspire me tarot more** *include Waite's reading*\n**!inspire me tarot verbose** *include Waite's reading*"
+    "comm": "**?tarot** *draw a card for everyone to see*\n**?tarot more** *include Waite's reading*\n**?tarot verbose** *include Waite's reading*\n**?tarot me** *draw a card for yourself*"
   },
   "reddit": {
     "desc": "This bot can fetch random Reddit posts from a selection of subreddits that focus on creative prompts.",
     "sugg": "Many of the prompts are focused on short stories, but they also work for lyrics.",
-    "comm": "**!inspire me reddit** *send yourself a random Reddit prompt*"
+    "comm": "**?reddit** *post a random Reddit prompt*\n**?reddit me** *send yourself a random Reddit prompt*"
   },
   "trope": {
     "desc": "This bot can fetch a link to a random entry in TV Tropes' List of Gothic Horror Tropes.",
     "sugg": "Whether you play these tropes straight or subvert them into submission is up to you.",
-    "comm": "**!inspire me trope** *send yourself a random TV Trope*"
+    "comm": "**?trope** *post a random TV Trope*\n**?trope me** *send yourself a random trope*"
   },
   "help": {
-    "desc": "**Omnimancer** is an \"8-ball\" style bot which can provide one of many types of random prompts to inspire creative people. Built with Gothy Discord in mind, it can flip coins, roll dice, search for random images, draw Oblique Strategies and Tarot cards, and fetch content from Reddit and TV Tropes. You can tell the bot to give you one of these options specifically, or it can pick one for you.",
-    "comm": "**!inspire me** *send yourself a random prompt*\n**!inspire all** *post a random prompt to the bot room*\n**!inspire help** *this helpfile*\n**!inspire [me/all] [module]** *post a specific type of prompt*\n**!inspire help [module]** *help with a specific type of prompt*\nModule types include **dice, oblique, image, tarot, reddit, trope**",
-    "exam": "**!inspire me oblique** *draw an Oblique Strategies card*\n**!inspire help tarot** *get help with Tarot module*\n**!inspire all dice 6** *roll a 6-sided die for all to see*"
+    "desc": "Writer's or artist's block getting you down? **Omnimancer** is an bot which posts many types of **random prompts** to inspire creative people. Built with Gothy Discord in mind, it can flip coins, roll dice, search for random images, draw Oblique Strategies and Tarot cards, and fetch content from Reddit and TV Tropes--all with a roughly Gothic theme.\n\nYou can tell the bot to give you one of these options specifically (see \"Commands\"), or it can pick one for you with the ?random command. The bot usually posts results to #bot-room, but if you want your result to be private, you can type **me** at the end of your command.\n\nLike many of the card decks it's based on, Omnimancer rewards **lateral thinking** and creative interpretation. The helpfiles come with suggestions to interpret prompts whose meaning isn't immediately obvious.",
+    "comm": "**?dice** *flip coins or roll dice (d4, d6, d8, d10, d12, d20, d100)*\n**?oblique** *draw an Oblique Strategies card*\n**?image** *random online image search...no worries, it's SFW*\n**?tarot** *draw a Tarot card and look up its meaning*\n**?reddit** *writing/art prompt from Reddit*\n**?trope** *draw from the List of Gothic Horror Tropes*\n**?random** *the bot picks a prompt for you*\n**?[...] me** *send results to yourself as a DM*",
+    "help": "**?help** *this helpfile*\n**?help [...]** *helpfile for a specific type of prompt*\nPrompt types include **dice, oblique, image, tarot, reddit, trope, random**\n",
+    "exam": "**?oblique** *draw an Oblique Strategies card*\n**?help reddit** *get help with Reddit module*\n**?dice 12** *roll a 12-sided die*"
   }
 }

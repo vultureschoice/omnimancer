@@ -1,19 +1,19 @@
 /* INITIALIZATION */
 
 // Import discord.js
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 // Create new Discord client, enabling the methods that make the bot work
 const client = new Discord.Client();
 const botRoomName = "bot-room";
-const prefix = '!';
+const prefix = "?";
 
 // Import NPM libraries for online content searching
-const got = require('got'); // makes HTTP calls
-const cheerio = require('cheerio'); // wrapper for jQuery
+const got = require("got"); // makes HTTP calls
+const cheerio = require("cheerio"); // wrapper for jQuery
 
 // Hide API key
 // TODO: Disable on Heroku server because it handles env variables differently
-// require('dotenv').config();
+require("dotenv").config();
 
 // Variables for parsing user input
 let inputString = "";
@@ -33,8 +33,9 @@ const HELP_MODULE = 6;
 const NUM_MODULES = 6;
 
 // Consts for the command parser
-const VALID_FIRST_ARGS = ["me", "all", "help"];
-const FIRST_ARG_ERROR = "I don't understand that command. Type **!inspire help** for more details."
+const VALID_MODULES = ["dice", "oblique", "image", "tarot", "reddit", "trope", "help", "random"];
+const PRIVACY_ARGS = ["private", "me"];
+const FIRST_ARG_ERROR = `I don't understand that command. Type **${prefix}help** for more details.`
 
 const WRONG_DICE_WARNING = "I don't have that die, so I'll roll a random one.\nI have a 2-sided coin, and 4-, 6-, 8-, 10-, 12-, 20-, and 100-sided dice.\n\n";
 
@@ -45,6 +46,7 @@ const CUPS = 2;
 const SWORDS = 3;
 const PENTACLES = 4;
 const DECK_LENGTH = 78;
+const UPRIGHT_ODDS = 0.85;
 
 const JSON_POST_LIMIT = 500;
 
@@ -55,13 +57,14 @@ const VERB_ARG_ERROR = "Sorry, I can't tell how verbose you want the Tarot card 
 
 const diceModule = {
   dice: [2, 4, 6, 8, 10, 12, 20, 100],
-  invoke: function (n) {
+  invoke: function(n) {
     // timeLog(`Preparing to roll ${n}-sided die`);
-    let index = 0, die, warn = "";
+    let index = 0,
+      die, warn = "";
     // User selected die
     if (this.dice.includes(n)) {
       die = n;
-    // Select a random die
+      // Select a random die
     } else {
       index = Math.floor(Math.random() * this.dice.length);
       die = this.dice[index];
@@ -76,8 +79,7 @@ const diceModule = {
     if (die === 2) { // If it flips a coin (because dice[0] = 2)
       return warn + "Flipping a coin. I got **" +
         (roll === 1 ? "heads" : "tails") + "**.";
-    }
-    else {
+    } else {
       return warn + "Rolling 1d" + die + ". I got **" + roll + "**.";
     }
   }
@@ -85,23 +87,23 @@ const diceModule = {
 
 const obliqueModule = {
   // Load Oblique Strategies cards from external JSON file
-  strats: require('./obliqueStrats.json'),
-  invoke: function () {
+  strats: require("./obliqueStrats.json"),
+  invoke: function() {
     // Select a random index
     let index = Math.floor(Math.random() * this.strats.length);
     // Return result
     return new Discord.MessageEmbed()
       .setTitle(this.strats[index])
-      .addField('\u200B', '\u200B') // Blank space
+      .addField("\u200B", "\u200B") // Blank space
       .setFooter("Oblique Strategies\nby Brian Eno & Peter Schmidt");
   }
 };
 
 const imageModule = {
   // Most code taken from a YouTuber called Undo
-  terms: require('./searchTerms.json'),
+  terms: require("./searchTerms.json"),
   result: "",
-  invoke: async function () { // async because it makes an HTTP call
+  invoke: async function() { // async because it makes an HTTP call
     try {
       // Generate a Dogpile image search from a list of terms
       let termIndex = Math.floor(Math.random() * this.terms.length);
@@ -121,8 +123,7 @@ const imageModule = {
       this.result = urls[imgIndex];
       timeLog("HTTP request complete. Image URL loaded: " + this.result);
       return this.result;
-    }
-    catch (err) {
+    } catch (err) {
       timeLog(err);
     }
   }
@@ -130,27 +131,28 @@ const imageModule = {
 
 const tarotModule = {
   // The Tarot deck is an array of objects, stored as a JSON file
-  deck: require('./tarotCards.json'),
+  deck: require("./tarotCards.json"),
   suits: ["Major Arcana", "Wands", "Cups", "Swords", "Pentacles"],
   numbers: [null, "Ace", "Two", "Three", "Four", "Five", "Six", "Seven",
-    "Eight", "Nine", "Ten", "Page", "Knight", "Queen", "King"],
+    "Eight", "Nine", "Ten", "Page", "Knight", "Queen", "King"
+  ],
   colors: ["#E5E0ED", "#C1B928", "#6286B6", "#550C01", "#576A1C"], // match suits
-  invoke: async function (verbose) {
+  invoke: async function(verbose) {
     // Validate verbosity argument
     if (typeof(verbose) !== "boolean") return VERB_ARG_ERROR;
     let index = Math.floor(Math.random() * DECK_LENGTH);
     // 80% chance of being upright
-    let upright = Math.floor(Math.random()) < 0.8 ? true : false;
-    // if (upright) timeLog("Card is upright");
-    // else timeLog("Card is reversed");
+    let upright = Math.random() < UPRIGHT_ODDS ? true : false;
+    // if (upright) timeLog("Card is upright: " + upright);
+    // else timeLog("Card is reversed" + upright);
 
     // Generate title
     let title = "";
-    if (this.deck[index].suit === 0) {     // Major Arcana
+    if (this.deck[index].suit === 0) { // Major Arcana
       title = this.deck[index].name;
-    } else {                               // Minor Arcana
-      title = this.numbers[this.deck[index].number] + " of "
-        + this.suits[this.deck[index].suit];
+    } else { // Minor Arcana
+      title = this.numbers[this.deck[index].number] + " of " +
+        this.suits[this.deck[index].suit];
     }
     if (!upright) title += " (reversed)";
 
@@ -159,12 +161,12 @@ const tarotModule = {
     timeLog("Fetching image: " + image);
 
     // Generate url
-    let url = "https://www.tarot.com/tarot/cards/" + this.deck[index].url
-      + "/rider";
+    let url = "https://www.tarot.com/tarot/cards/" + this.deck[index].url +
+      "/rider";
 
     // Generate image url
-    let imgUrl = "https://raw.githubusercontent.com/vultureschoice/omnimancer/"
-      + "master/tarot_images/" + image;
+    let imgUrl = "https://raw.githubusercontent.com/vultureschoice/omnimancer/" +
+      "master/tarot_images/" + image;
 
     // Make an embed
     if (verbose) {
@@ -174,13 +176,14 @@ const tarotModule = {
         .setURL(url)
         .setColor(this.colors[this.deck[index].suit])
         .setImage(imgUrl)
-        .addFields(
-          {name: 'Meaning', value:
-            (upright ? this.deck[index].meaning : this.deck[index].rev)}
-        )
-        .setFooter("Description from Waite\'s Pictorial Guide to the Tarot"
-          + "\nImage © U.S. Games Systems, Inc.");
-        return result;
+        .addFields({
+          name: "Meaning",
+          value: (upright ? this.deck[index].meaning : this.deck[index].rev),
+          inline: true
+        })
+        .setFooter("Description from Waite\'s Pictorial Guide to the Tarot" +
+          "\nImage © U.S. Games Systems, Inc.");
+      return result;
     } else {
       timeLog("Drawing Tarot card tersely");
       let result = await new Discord.MessageEmbed()
@@ -188,25 +191,26 @@ const tarotModule = {
         .setURL(url)
         .setColor(this.colors[this.deck[index].suit])
         .setImage(imgUrl)
-        .setFooter('Image © U.S. Games Systems, Inc.');
+        .setFooter("Image © U.S. Games Systems, Inc.");
       return result;
     }
   }
 };
 
 const redditModule = {
-  subreddits: require('./subreddits.json'),
+  subreddits: require("./subreddits.json"),
   flairs: ["Prompt", "Writing Prompt", "Thematic Prompt", "Dialogue Prompt",
     "Miscellaneous Prompt", "Reality Fiction", "Simple Prompt", "Image Prompt",
-    "Picture Prompt"],
+    "Picture Prompt"
+  ],
   titleFlairs: ["[WP]", "[Prompt]", "[SP]"],
-  invoke: async function () {
+  invoke: async function() {
     // Generate URL to pull post from
     let subredditIndex = Math.floor(Math.random() * this.subreddits.length);
     const sr = this.subreddits[subredditIndex];
     timeLog("Pulling a random post from r/" + sr);
-    let url = "https://www.reddit.com/r/" + sr + ".json?limit="
-      + JSON_POST_LIMIT;
+    let url = "https://www.reddit.com/r/" + sr + ".json?limit=" +
+      JSON_POST_LIMIT;
     timeLog("Extracting JSON data from " + url);
 
     // Next few lines stolen from the "reddit-simple" npm package
@@ -239,99 +243,125 @@ const redditModule = {
       return new Discord.MessageEmbed()
         .setTitle(embedTitle)
         .setURL(urls[i])
-        .addField('\u200B', '\u200B') // Blank space
+        .addField("\u200B", "\u200B") // Blank space
         .setFooter("Prompt from r/" + sr + "\nposted by u/" + authors[i]);
     }
   }
 };
 
 const tropeModule = {
-  tropes: require('./gothicTropes.json'),
-  invoke: function () {
+  tropes: require("./gothicTropes.json"),
+  invoke: function() {
     let i = Math.floor(Math.random() * this.tropes.length);
     return new Discord.MessageEmbed()
       .setTitle(this.tropes[i].name)
       .setURL("https://tvtropes.org/pmwiki/pmwiki.php/" + this.tropes[i].url)
-      .addField('\u200B', '\u200B') // Blank space
+      .addField("\u200B", "\u200B") // Blank space
       .setFooter("From TV Tropes' Index of Gothic Horror Tropes");
   }
 };
 
 const helpModule = {
-  text: require('./moduleDescriptions.json'),
-  invoke: function (num) {
-    switch(num) {
+  text: require("./moduleDescriptions.json"),
+  invoke: function(num) {
+    switch (num) {
       case DICE_MODULE:
         return new Discord.MessageEmbed()
           .setTitle("Dice and Coins")
           .setDescription(this.text.dice.desc)
-          .addFields(
-              {name: 'Suggestions', value: this.text.dice.sugg },
-          		{name: 'Commands', value: this.text.dice.comm }
-          	)
+          .addFields({
+            name: "Suggestions",
+            value: this.text.dice.sugg
+          }, {
+            name: "Commands",
+            value: this.text.dice.comm
+          })
           .setFooter("Omnimancer Help");
         break;
       case OBLIQUE_MODULE:
         return new Discord.MessageEmbed()
           .setTitle("Oblique Strategies")
           .setDescription(this.text.oblique.desc)
-          .addFields(
-              {name: 'Suggestions', value: this.text.oblique.sugg },
-              {name: 'Commands', value: this.text.oblique.comm }
-          	)
+          .addFields({
+            name: "Suggestions",
+            value: this.text.oblique.sugg
+          }, {
+            name: "Commands",
+            value: this.text.oblique.comm
+          })
           .setFooter("Omnimancer Help");
         break;
       case IMAGE_MODULE:
         return new Discord.MessageEmbed()
           .setTitle("Random images")
           .setDescription(this.text.image.desc)
-          .addFields(
-              {name: 'Suggestions', value: this.text.image.sugg},
-          		{name: 'Commands', value: this.text.image.comm }
-          	)
+          .addFields({
+            name: "Suggestions",
+            value: this.text.image.sugg
+          }, {
+            name: "Commands",
+            value: this.text.image.comm
+          })
           .setFooter("Omnimancer Help");
         break;
       case TAROT_MODULE:
         return new Discord.MessageEmbed()
           .setTitle("Random Tarot cards")
           .setDescription(this.text.tarot.desc)
-          .addFields(
-              {name: 'Suggestions', value: this.text.tarot.sugg},
-              {name: 'Commands', value: this.text.tarot.comm}
-          	)
+          .addFields({
+            name: "Suggestions",
+            value: this.text.tarot.sugg
+          }, {
+            name: "Commands",
+            value: this.text.tarot.comm
+          })
           .setFooter("Omnimancer Help");
         break;
       case REDDIT_MODULE:
         return new Discord.MessageEmbed()
           .setTitle("Random Reddit prompts")
           .setDescription(this.text.reddit.desc)
-          .addFields(
-              {name: 'Suggestions', value: this.text.reddit.sugg},
-          		{name: 'Commands', value: this.text.reddit.comm }
-          	)
+          .addFields({
+            name: "Suggestions",
+            value: this.text.reddit.sugg
+          }, {
+            name: "Commands",
+            value: this.text.reddit.comm
+          })
           .setFooter("Omnimancer Help");
         break;
       case TROPE_MODULE:
         return new Discord.MessageEmbed()
           .setTitle("Random TV Tropes")
           .setDescription(this.text.trope.desc)
-          .addFields(
-              {name: 'Suggestions', value: this.text.trope.sugg},
-          		{name: 'Commands', value: this.text.trope.comm}
-          	)
+          .addFields({
+            name: "Suggestions",
+            value: this.text.trope.sugg
+          }, {
+            name: "Commands",
+            value: this.text.trope.comm
+          })
           .setFooter("Omnimancer Help");
         break;
-      // General help
+        // General help
       case HELP_MODULE:
         return new Discord.MessageEmbed()
           .setTitle("Omnimancer Help")
           .setDescription(this.text.help.desc)
-          .addFields(
-              {name: 'Commands', value: this.text.help.comm},
-              {name: 'Examples', value: this.text.help.exam}
-            )
+          .addFields({
+            name: "Commands",
+            value: this.text.help.comm
+          }, {
+            name: "Help Commands",
+            value: this.text.help.help,
+            inline: true
+          }, {
+            name: "Examples",
+            value: this.text.help.exam,
+            inline: true
+          })
           .setFooter("Omnimancer Help");
-          break;
+        break;
       default:
         timeLog("ERROR: Help module couldn't select anything");
         return "**ERROR:** Help module couldn't select anything";
@@ -362,8 +392,7 @@ async function moduleSelect(m, verbose, n) {
         if (verbose) {
           let result = await tarotModule.invoke(true);
           return result;
-        }
-        else {
+        } else {
           let result = await tarotModule.invoke(false);
           return result;
         }
@@ -437,24 +466,24 @@ function timeLog(str) {
 function cmdStringIsValid(msg) {
   // Make sure msg is coming from a real user.
   if (notBot(msg)) {
-    timeLog('Message from ' + msg.author.username
-      + ' in ' + msg.channel.name);
+    timeLog("Message from " + msg.author.username +
+      " in " + msg.channel.name);
     // Validate correct channel (bot room or DM channel)
     if (msg.channel.name === botRoomName || msg.channel.type == "dm") {
-      timeLog('Message came from correct channel.');
+      timeLog("Message came from correct channel.");
       // Validate command prefix
       if (msg.content.charAt(0) === prefix) {
-        // timeLog('Message has correct prefix: ' + msg.content.charAt(0));
+        // timeLog("Message has correct prefix: " + msg.content.charAt(0));
         return true;
       }
-      // timeLog('INVALID COMMAND: Message has incorrect prefix: '
+      // timeLog("INVALID COMMAND: Message has incorrect prefix: "
       //  + msg.content.charAt(0));
       return false;
     }
-    // timeLog('INVALID COMMAND: Message came from outside the bot room.');
+    // timeLog("INVALID COMMAND: Message came from outside the bot room.");
     return false;
   }
-  // timeLog('INVALID COMMAND: Message came from the bot.')
+  // timeLog("INVALID COMMAND: Message came from the bot.")
   return false;
 }
 
@@ -468,7 +497,7 @@ client.on("ready", () => {
 });
 
 // Executes every time a message is posted to any channel
-client.on('message', async (msg) => {
+client.on("message", async (msg) => {
   // Validate that message came from another user
   if (cmdStringIsValid(msg)) {
     // Prepare message for parsing
@@ -477,115 +506,113 @@ client.on('message', async (msg) => {
     inputString = inputString.trim().toLowerCase().substr(1);
     timeLog("Message will be parsed as: " + inputString);
     // Split input into array of arguments
-    args = inputString.split(' ');
+    args = inputString.split(" ");
     timeLog("Message split into " + args.length + " arguments");
     for (let i = 0; i < args.length; i++) {
       timeLog("Argument " + i + ": " + args[i]);
     }
 
     /* MAIN COMMAND PARSER */
+    if (!VALID_MODULES.includes(args[0])) {
+      msg.channel.send(FIRST_ARG_ERROR);
+    } else {
+      // Function scope variables
+      let result = "";
+      let privacy_flag = false;
 
-    if (args[0] == 'inspire') {
-      /* ARGUMENT 1
-      !inspire me sends results of a random module as a DM to the user
-      !inspire all posts these results to the bot room
-      */
-      if (!VALID_FIRST_ARGS.includes(args[1])) {
-        msg.channel.send(FIRST_ARG_ERROR);
+      // Send as DM or as message for everyone?
+      if (PRIVACY_ARGS.includes(args[args.length - 1])) {
+        privacy_flag = true;
+        args.pop();           // Remove last item
       }
-      else { // At least 2 arguments
-        let result;
-        if (args.length == 2) { // Exactly 2 arguments
-          // timeLog('Exactly 2 arguments: Select random module');
-          if (args[1] == "help") result = await moduleSelect(HELP_MODULE, false, null);
-          else result = await moduleSelect(randomModule(), false, null);
-        }
-        else if (args[1] != "help") { // More than 2 arguments
-          // timeLog('Multiple arguments: Select module manually');
-          switch (args[2]) {
-            case 'dice':
-              let n = null;
-              if (args[3]) switch (args[3]) {
-                case '2': case '4': case '6': case '8':
-                case '10': case '12': case '20': case '100':
-                  n = Number(args[3]);
-                  // timeLog(`Preparing to roll ${n}-sided die`);
-                  break;
-                default:
-                  n = 0;
-                  break;
-              }
-              result = await moduleSelect(DICE_MODULE, false, n);
-              break;
-            case 'oblique':
-              result = await moduleSelect(OBLIQUE_MODULE, false, null);
-              break;
-            case 'image':
-              result = await moduleSelect(IMAGE_MODULE, false, null);
-              break;
-            case 'tarot':
-              result = await moduleSelect(TAROT_MODULE,
-                (VERB_ARGS.includes(args[3]) ? true : false), null);
-              break;
-            case 'reddit':
-              result = await moduleSelect(REDDIT_MODULE, false, null);
-              break;
-            case 'trope':
-              result = await moduleSelect(TROPE_MODULE, false, null);
-              break;
-            case 'help':
-              result = await moduleSelect(HELP_MODULE, false, HELP_MODULE);
+
+      switch (args[0]) {
+        case "random":
+          result = await moduleSelect(randomModule(), false, null);
+          break;
+        case "dice":
+          let n = 0;
+          if (args[1]) switch (args[1]) {
+            case "2":
+            case "4":
+            case "6":
+            case "8":
+            case "10":
+            case "12":
+            case "20":
+            case "100":
+              n = Number(args[1]);
+              // timeLog(`Preparing to roll ${n}-sided die`);
               break;
             default:
-              result = "I don't know if I can do that. Type **!inspire help** for more details.";
+              n = 0;  // Selects random die on invalid input
+              break;
           }
-        }
-
-        // Wait for message to form, then route it to its destination
-        if (args[1] == "me") {
-          await msg.author.send(result)
-            .catch(err => timeLog(err));
-        }
-        else if (args[1] == "all") {
-          await msg.channel.send(result)
-            .catch(err => timeLog(err));
-        }
-
-        // Help command parser
-        else if (args[1] == "help") {
-          let result = await moduleSelect(HELP_MODULE, false, HELP_MODULE);
-          if (args[2]) switch (args[2]) {
-            case 'dice':
+          result = await moduleSelect(DICE_MODULE, false, n);
+          break;
+        case "oblique":
+          result = await moduleSelect(OBLIQUE_MODULE, false, null);
+          break;
+        case "image":
+          result = await moduleSelect(IMAGE_MODULE, false, null);
+          break;
+        case "tarot":
+          result = await moduleSelect(TAROT_MODULE,
+            (VERB_ARGS.includes(args[1]) ? true : false), null);
+          break;
+        case "reddit":
+          result = await moduleSelect(REDDIT_MODULE, false, null);
+          break;
+        case "trope":
+          result = await moduleSelect(TROPE_MODULE, false, null);
+          break;
+        case "help":
+          if (args[1]) switch (args[1]) {
+            case "dice":
               result = await moduleSelect(HELP_MODULE, false, DICE_MODULE);
               break;
-            case 'oblique':
+            case "oblique":
               result = await moduleSelect(HELP_MODULE, false, OBLIQUE_MODULE);
               break;
-            case 'image':
+            case "image":
               result = await moduleSelect(HELP_MODULE, false, IMAGE_MODULE);
               break;
-            case 'tarot':
+            case "tarot":
               result = await moduleSelect(HELP_MODULE, false, TAROT_MODULE);
               break;
-            case 'reddit':
+            case "reddit":
               result = await moduleSelect(HELP_MODULE, false, REDDIT_MODULE);
               break;
-            case 'trope':
+            case "trope":
               result = await moduleSelect(HELP_MODULE, false, TROPE_MODULE);
               break;
             default:
               result = await moduleSelect(HELP_MODULE, false, HELP_MODULE);
               break;
+          } else {
+            result = await moduleSelect(HELP_MODULE, false, HELP_MODULE);
           }
-          await msg.channel.send(result)
-            .catch(err => timeLog(err));
-        }
+          break;
+        default:
+          result = "I don't know if I can do that. Type **?help** for more details.";
+          break;
       }
-    }
 
-    // Reset
-    // timeLog('Resetting inputs');
-    args = [];
+      // Wait for message to form, then route it to its destination
+      if (privacy_flag == true) {
+        timeLog("Sending message privately");
+        await msg.author.send(result)
+          .catch(err => timeLog(err));
+      } else {
+        timeLog("Sending message publicly");
+        await msg.channel.send(result)
+          .catch(err => timeLog(err));
+      }
+
+      // Reset
+      // timeLog("Resetting inputs");
+      args = [];
+    }
   }
 });
 
