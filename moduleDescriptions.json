@@ -2,7 +2,7 @@
   "dice": {
     "desc": "This bot can flip a coin (2 sides) or roll one of seven standard dice for tabletop games (4, 6, 8, 10, 12, 20, or 100 sides). You can specify any of those numbers, or the bot can randomly pick a die or coin for you.",
     "sugg": "- Use an 8-sided die repeatedly to generate a melody\n- Use a 12-sided die to pick one of 12 musical keys\n- Check tabletop game manuals for die-based events that can inspire writing",
-    "comm": "**?dice** *roll a random die and post the results*\n**?dice 2** *flip a coin*\n**?dice 20** *roll a 20-sided die for everyone\n**?dice me** *roll a 6-sided die for yourself*"
+    "comm": "**?dice** *roll a random die and post the results*\n**?dice 2** *flip a coin*\n**?dice 20** *roll a 20-sided die for everyone*\n**?dice me** *roll a 6-sided die for yourself*"
   },
   "oblique": {
     "desc": "This bot can draw a card from Oblique Strategies, a set of creative prompts written by musician Brian Eno and artist Peter Schmidt. Oblique Strategies inspired the creation of this bot.",
