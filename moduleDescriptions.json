@@ -1,8 +1,8 @@
 {
   "dice": {
-    "desc": "This bot can flip a coin (2 sides) or roll one of seven standard dice for tabletop games (4, 6, 8, 10, 12, 20, or 100 sides). You can specify any of those numbers, or the bot can randomly pick a die or coin for you.",
-    "sugg": "- Use an 8-sided die repeatedly to generate a melody\n- Use a 12-sided die to pick one of 12 musical keys\n- Check tabletop game manuals for die-based events that can inspire writing",
-    "comm": "**?dice** *roll a random die and post the results*\n**?dice 2** *flip a coin*\n**?dice 20** *roll a 20-sided die for everyone*\n**?dice me** *roll a 6-sided die for yourself*"
+    "desc": "This bot can roll dice using dice notation, which originates from tabletop games. The seven standard tabletop dice have 4, 6, 8, 10, 12, 20, and 100 sides; they are notated *d4, d6, d8, d10, d12, d20, and d100*. When rolling a die more than once, the number of rolls is written in front of the \"d\", e.g. *2d6*. Omnimancer can also roll non-standard dice (e.g. d3, d7), many of which can't exist in real life. You can add or subtract a number with *+* or *-* for (de)buffs, as in *d12+3* or *d8-5*.\n\n*Exploding dice* is a mechanic some games use, in which rolling the highest number allows you to add an extra roll to your total, marked with *!* after the number of die sides. For example, if you roll *2d6!*, it's possible to get something like __6 + 5__ + 2 = 13 or even 4 + __6 + 6 + 6 + 1__ = 23.\n\nFor games that use them, this bot also supports *FUDGE* or *FATE* dice, which are six-sided dice with 2 blank faces, 2 faces with + signs, and 2 faces with - signs each. You can use these with **?roll dF**.\n\nOmnimancer can roll up to 999-sided dice 99 times in one command.",
+    "sugg": "- Use several 8-sided die to generate a melody\n- Use a 12-sided die to pick one of 12 musical keys\n- Check tabletop game manuals for die-based events that can inspire writing",
+    "comm": "**?roll d20** *roll a twenty-sided die once*\n**?roll 5d6** *roll a six-sided die five times*\n**?roll NdX** *roll an X-sided die N times*\n**?roll d%** *alternative way of writing d100*\n**?roll dR** *roll a random standard die*\n**?roll dF** *roll FUDGE/FATE dice*\n**?roll 4d4+2** *roll 4d4, then add 2 to the total*\n**?roll 3d6!** *roll 3d6 exploding*\n**?roll [...] me** *privately roll, good for GMs*"
   },
   "oblique": {
     "desc": "This bot can draw a card from Oblique Strategies, a set of creative prompts written by musician Brian Eno and artist Peter Schmidt. Oblique Strategies inspired the creation of this bot.",
@@ -31,8 +31,13 @@
   },
   "help": {
     "desc": "Writer's or artist's block getting you down? **Omnimancer** is an bot which posts many types of **random prompts** to inspire creative people. Built with Gothy Discord in mind, it can flip coins, roll dice, search for random images, draw Oblique Strategies and Tarot cards, and fetch content from Reddit and TV Tropes--all with a roughly Gothic theme.\n\nYou can tell the bot to give you one of these options specifically (see \"Commands\"), or it can pick one for you with the ?random command. The bot usually posts results to #bot-room, but if you want your result to be private, you can type **me** at the end of your command.\n\nLike many of the card decks it's based on, Omnimancer rewards **lateral thinking** and creative interpretation. The helpfiles come with suggestions to interpret prompts whose meaning isn't immediately obvious.",
-    "comm": "**?dice** *flip coins or roll dice (d4, d6, d8, d10, d12, d20, d100)*\n**?oblique** *draw an Oblique Strategies card*\n**?image** *random online image search...no worries, it's SFW*\n**?tarot** *draw a Tarot card and look up its meaning*\n**?reddit** *writing/art prompt from Reddit*\n**?trope** *draw from the List of Gothic Horror Tropes*\n**?random** *the bot picks a prompt for you*\n**?[...] me** *send results to yourself as a DM*",
-    "help": "**?help** *this helpfile*\n**?help [...]** *helpfile for a specific type of prompt*\nPrompt types include **dice, oblique, image, tarot, reddit, trope, random**\n",
-    "exam": "**?oblique** *draw an Oblique Strategies card*\n**?help reddit** *get help with Reddit module*\n**?dice 12** *roll a 12-sided die*"
+    "comm": "**?roll**, **?dice** *roll tabletop dice*\n**?flip**, **?coin** *flip coins*\n**?oblique** *draw an Oblique Strategies card*\n**?image** *random online image search...no worries, it's SFW*\n**?tarot** *draw a Tarot card and look up its meaning*\n**?reddit** *writing/art prompt from Reddit*\n**?trope** *draw from the List of Gothic Horror Tropes*\n**?random** *the bot picks a prompt for you*\n**?[...] me** *send results to yourself as a DM*",
+    "help": "**?help** *this helpfile*\n**?help [...]** *helpfile for a specific type of prompt*\nPrompt types include **dice, coin, oblique, image, tarot, reddit, trope, random**\n",
+    "exam": "**?oblique** *draw an Oblique Strategies card*\n**?help reddit** *get help with Reddit module*\n**?roll d20** *roll a 20-sided die*"
+  },
+  "coin": {
+    "desc": "This bot can flip coins. You can use **?flip** or **?coin**.",
+    "sugg": "- Flip 16 coins to make a random 4/4 rhythm with just heads or tails",
+    "comm": "**?flip**, **?coin** *flip a coin for all to see*\n**?flip 6** *flip six coins*\n**?flip 10 me** *flip 10 coins that only you can see*"
   }
 }
