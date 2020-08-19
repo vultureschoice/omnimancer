@@ -25,7 +25,7 @@ module.exports = {
 
     /* GENERATE FLIPS */
     msg += "Flipping ";
-    if (coins == 1) msg += "a coin.";
+    if (coins === 1) msg += "a coin.";
     else msg += coins + " coins.";
 
     msg += "\nYou flipped ";

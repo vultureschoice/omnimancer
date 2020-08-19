@@ -216,7 +216,7 @@ client.on("message", async (msg) => {
         case "coin":
         case "flip":
           result = await moduleSelect(COIN_MODULE, false,
-            (args[1]) ? args[1] : "1");
+            (args[1]) ? args[1] : 1);
           break;
         case "roll":
         case "dice":
