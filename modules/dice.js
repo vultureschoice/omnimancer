@@ -34,8 +34,10 @@ module.exports = {
     let dIndex = rollRequest.indexOf("d");
     let eIndex = rollRequest.indexOf("!");
     let buffIndex = rollRequest.indexOf("+");
-    if (buffIndex == -1) buffIndex = rollRequest.indexOf("-");
-    if (buffIndex != -1) debuff = true;
+    if (buffIndex == -1) buffIndex {
+      rollRequest.indexOf("-");
+      if (buffIndex != -1) debuff = true;
+    }
 
     // Find number of dice
     if (rollRequest.charAt(0) != "d") { // Treat "dX" as "1dX"
@@ -123,10 +125,10 @@ module.exports = {
       } else {
         total = rolls.reduce((acc, cur) => acc + cur);
       }
-      if (buff > 0) {
-        msg += ".\nYou also have a buff of " + buff;
-      } else if (buff < 0) {
+      if (debuff) {
         msg += ".\nYou also have a debuff of " + buff;
+      } else if (buff != 0) {
+        msg += ".\nYou also have a buff of " + buff;
       }
       if (debuff) total -= buff;
       else total += buff;
