@@ -34,8 +34,8 @@ module.exports = {
     let dIndex = rollRequest.indexOf("d");
     let eIndex = rollRequest.indexOf("!");
     let buffIndex = rollRequest.indexOf("+");
-    if (buffIndex == -1) buffIndex {
-      rollRequest.indexOf("-");
+    if (buffIndex == -1) {
+      buffIndex = rollRequest.indexOf("-");
       if (buffIndex != -1) debuff = true;
     }
 
