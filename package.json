@@ -8,9 +8,13 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "cheerio": "^1.0.0-rc.3",
+    "cheerio": "^1.0.0-rc.5",
+    "dependencies": "0.0.1",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
-    "got": "^11.5.1"
+    "got": "^11.8.1"
+  },
+  "engines": {
+	"node": "14.x"
   }
 }
