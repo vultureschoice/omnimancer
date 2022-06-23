@@ -12,7 +12,7 @@
     "dependencies": "0.0.1",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
-    "got": "^11.8.1"
+    "got": "^11.8.5"
   },
   "engines": {
     "node": "14.x"
